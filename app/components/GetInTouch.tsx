@@ -120,7 +120,7 @@ const GetInTouch = () => {
                 <div className="flex items-center space-x-3">
                   <Customcall />
                   <span className="text-[var(--text-color-dark)] text-[14px] md:text-[16px] font-['DM_Sans',sans-serif]">
-                  0091 8905135456
+                  00917207646868
                   </span>
                 </div>
                 <div className="flex items-center space-x-3">
