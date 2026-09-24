@@ -33,9 +33,9 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "Rem Nutri",
   description: "Your personalized nutrition and wellness platform.",
-  icons: {
-    icon: "/favicon.ico",
-  },
+  // Icons come from the app/ file conventions: favicon.ico, icon.png and
+  // apple-icon.png. An explicit `icons` entry here would override those and
+  // suppress the PNG variants, so it is deliberately omitted.
 };
 
 export default function RootLayout({
@@ -44,7 +44,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${libreBaskerville.variable} ${dmSans.variable} antialiased bg-white text-gray-900`}
       >

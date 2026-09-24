@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import BookConsultationButton from "../../components/BookConsultationButton";
 import ScrollAnimation from "../../components/ScrollAnimation";
 import Image from "next/image";
 import Navbar from "../../components/Navbar";
@@ -44,7 +45,7 @@ const programSteps = [
   },
 ];
 
-const RemDi2Page = () => {
+const RemDiaPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -150,7 +151,7 @@ const RemDi2Page = () => {
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="text-[48px] lg:text-[64px] font-['Libre_Baskerville',serif] text-[var(--text-color-plain)] leading-tight mb-6"
                   >
-                    RemDi <span className="text-[var(--text-color-light)]">2</span>
+                    Rem<span className="text-[var(--text-color-light)]">Dia</span>
                   </motion.h1>
 
                   {/* Description */}
@@ -160,7 +161,7 @@ const RemDi2Page = () => {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="text-xl lg:text-2xl text-[var(--text-color-plain)]/80 font-['DM_Sans', 'sans-serif'] leading-relaxed mb-8 max-w-2xl"
                   >
-                    Research shows an 80% chance of reversing Type 2 or Pre-Diabetes without medication. The key? Losing 15kg (or 15% of your body weight) in 12 weeks. RemDi 2 is here to help you do just that!
+                    Research shows an 80% chance of reversing Type 2 or Pre-Diabetes without medication. The key? Losing 15kg (or 15% of your body weight) in 12 weeks. RemDia is here to help you do just that!
                   </motion.p>
 
                   {/* <motion.p
@@ -169,7 +170,7 @@ const RemDi2Page = () => {
                     transition={{ duration: 0.6, delay: 0.6 }}
                     className="text-xl lg:text-2xl text-[var(--text-color-plain)]/80 font-['DM_Sans', 'sans-serif'] leading-relaxed mb-8 max-w-2xl"
                   >
-                    Research shows an 80% chance of reversing Type 2 or Pre-Diabetes without medication. The key? Losing 15kg (or 15% of your body weight) in 12 weeks. RemDi 2 is here to help you do just that!
+                    Research shows an 80% chance of reversing Type 2 or Pre-Diabetes without medication. The key? Losing 15kg (or 15% of your body weight) in 12 weeks. RemDia is here to help you do just that!
                   </motion.p> */}
 
                   {/* Quick Stats */}
@@ -203,14 +204,9 @@ const RemDi2Page = () => {
                     >
                       Start Your Journey
                     </a>
-                    <a
-                      href="https://calendly.com/"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <BookConsultationButton
                       className="flex-1 text-center items-center justify-center px-4 sm:px-6 py-3 sm:py-4 border border-[var(--text-color-plain)]/20 text-[var(--text-color-plain)] font-semibold rounded-xl hover:bg-[var(--text-color-plain)]/10 transition-all duration-300 text-base sm:text-base"
-                    >
-                      Book Consultation
-                    </a>
+                    />
                   </motion.div>
                 </div>
               </ScrollAnimation>
@@ -232,7 +228,7 @@ const RemDi2Page = () => {
                   <div className="relative h-[500px] lg:h-[600px] rounded-2xl overflow-hidden">
                     <Image
                       src="/images/rem_nutri_hero_Section.webp"
-                      alt="RemDi 2 Program"
+                      alt="RemDia Program"
                       fill
                       className="object-cover"
                       priority
@@ -379,7 +375,7 @@ const RemDi2Page = () => {
                     <div className="rounded-2xl overflow-hidden relative z-10">
                       <Image
                         src="/images/rem_nutri_hero_Section.webp"
-                        alt="RemDi 2 Program Features"
+                        alt="RemDia Program Features"
                         width={500}
                         height={300}
                         className="w-full h-[300px] md:h-[650px] object-cover"
@@ -493,15 +489,10 @@ const RemDi2Page = () => {
                   transition={{ duration: 0.6, delay: 0.3 }}
                   className="flex justify-center items-center w-full max-w-md mx-auto"
                 >
-                  <motion.a
-                    href="https://calendly.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.02 }}
+                  <BookConsultationButton
+                    hoverScale={1.02}
                     className="text-center py-3 sm:py-4 px-8 bg-[var(--text-color-light)] text-black font-semibold rounded-xl hover:opacity-90 transition-all duration-300 text-base sm:text-base min-w-[200px]"
-                  >
-                    Book Consultation
-                  </motion.a>
+                  />
                 </motion.div>
               </div>
             </div>
@@ -512,4 +503,4 @@ const RemDi2Page = () => {
   );
 };
 
-export default RemDi2Page;
+export default RemDiaPage;

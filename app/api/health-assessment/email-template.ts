@@ -1,3 +1,5 @@
+import { SITE_URL } from '@/app/utils/email';
+
 export const generateEmailContent = (data: any) => {
   const getBMICategory = (bmi: number): string => {
     if (bmi < 18.5) return "Underweight";
@@ -124,11 +126,11 @@ export const generateEmailContent = (data: any) => {
   
   if (data.recommendedProgram && data.recommendedProgram.length > 0) {
     const programMap = {
-      "rem-di-2": {
-        name: "RemDi 2",
+      "rem-dia": {
+        name: "RemDia",
         fullName: "Type 2 and Pre Diabetes Reversal Programme",
         description: "A personalized program designed to help you achieve remission from Type 2 Diabetes through nutrition.",
-        route: "remdi2",
+        route: "remdia",
         color: "#3B82F6" // Blue
       },
       "rem-bliss": {
@@ -208,7 +210,7 @@ export const generateEmailContent = (data: any) => {
         </tr>
         <tr>
           <td style="text-align: center; padding-bottom: ${data.recommendedProgram.indexOf(programId) < data.recommendedProgram.length - 1 ? '32px' : '0'};">
-            <a href="https://rem-nutri-web.vercel.app/programs/${program.route}" style="font-family: Arial, sans-serif; display: inline-block; background-color: ${program.color}; color: white; text-decoration: none; padding: 12px 24px; border-radius: 9999px; font-weight: bold; font-size: 14px;">Learn more about this program →</a>
+            <a href="${SITE_URL}/programs/${program.route}" style="font-family: Arial, sans-serif; display: inline-block; background-color: ${program.color}; color: white; text-decoration: none; padding: 12px 24px; border-radius: 9999px; font-weight: bold; font-size: 14px;">Learn more about this program →</a>
           </td>
         </tr>
         ${data.recommendedProgram.indexOf(programId) < data.recommendedProgram.length - 1 ? `
@@ -463,7 +465,7 @@ export const generateEmailContent = (data: any) => {
           <tr>
             <td style="background-color: #F3F4F6; padding: 36px; text-align: center;" class="section-padding">
               <p style="font-family: Arial, sans-serif; color: #6B7280; margin: 0 0 20px 0; font-size: 15px;">Report generated on ${timestamp} (IST)</p>
-              <a href="https://rem-nutri-web.vercel.app" style="font-family: Arial, sans-serif; display: inline-block; background-color: #4A90E2; color: white; text-decoration: none; padding: 14px 36px; border-radius: 9999px; font-weight: bold; font-size: 16px;">Explore Wellness Programs</a>
+              <a href="${SITE_URL}" style="font-family: Arial, sans-serif; display: inline-block; background-color: #4A90E2; color: white; text-decoration: none; padding: 14px 36px; border-radius: 9999px; font-weight: bold; font-size: 16px;">Explore Wellness Programs</a>
             </td>
           </tr>
         </table>

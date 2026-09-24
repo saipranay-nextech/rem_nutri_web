@@ -23,8 +23,8 @@ const healthConditions = [
 
 const programs = [
   {
-    id: "rem-di-2",
-    name: "RemDi 2",
+    id: "rem-dia",
+    name: "RemDia",
     description: "Type 2 and Pre Diabetes Reversal Programme",
     icon: "💉"
   },
@@ -390,13 +390,13 @@ const HealthAssessment = () => {
     const lifestyleFactors = formData.lifestyleFactors || [];
     const knowsHealthConditions = formData.knowsHealthConditions;
 
-    // 1. If Diabetes or Pre-Diabetes, always RemDi 2
+    // 1. If Diabetes or Pre-Diabetes, always RemDia
     if (
       knowsHealthConditions !== 'no' &&
       !conditions.includes('none') &&
       (conditions.includes('prediabetes') || conditions.includes('diabetes'))
     ) {
-      return 'rem-di-2';
+      return 'rem-dia';
     }
 
     // 2. If no Diabetes, but has BP, Fatty Liver, or Cardiac Risk, Rem Meta
@@ -1739,7 +1739,7 @@ const HealthAssessment = () => {
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => {
                                       let routeId = programId;
-                                      if (programId === "rem-di-2") routeId = "remdi2";
+                                      if (programId === "rem-dia") routeId = "remdia";
                                       else if (programId === "rem-bliss") routeId = "rembliss";
                                       else if (programId === "rem-fit") routeId = "remfit";
                                       else if (programId === "rem-meta") routeId = "remmeta";

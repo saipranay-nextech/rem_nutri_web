@@ -1,11 +1,11 @@
 import Image from "next/image";
  import GetInTouch from "../components/GetInTouch";
  import Link from "next/link";
- import { client } from "../../sanity/lib/client";
+ import { safeFetch } from "../../sanity/lib/client";
  import ScrollAnimation from "../components/ScrollAnimation";
  import NavbarWrapper from "../components/NavbarWrapper";
  export default async function Blog() {
-  const blogPosts = await client.fetch(`
+  const blogPosts = await safeFetch<any[]>(`
     *[_type == "post"] | order(publishedAt desc){
       title,
       "slug": slug.current,
@@ -13,7 +13,7 @@ import Image from "next/image";
       "description": titleLine,
       publishedAt
     }
-  `);
+  `, {}, []);
 
   return (
     <>

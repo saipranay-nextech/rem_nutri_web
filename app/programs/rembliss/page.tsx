@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import BookConsultationButton from "../../components/BookConsultationButton";
 import ScrollAnimation from "../../components/ScrollAnimation";
 import Image from "next/image";
 import Navbar from "@/app/components/Navbar";
@@ -196,14 +197,9 @@ const RemBlissPage = () => {
                     >
                       Start Your Journey
                     </a>
-                    <a
-                      href="https://calendly.com/"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <BookConsultationButton
                       className="flex-1 text-center items-center justify-center px-4 sm:px-8 py-3 sm:py-4 border border-[var(--text-color-plain)]/20 text-[var(--text-color-plain)] font-semibold rounded-xl hover:bg-[var(--text-color-plain)]/10 transition-all duration-300 text-base sm:text-base"
-                    >
-                      Book Consultation
-                    </a>
+                    />
                   </motion.div>
                 </div>
               </ScrollAnimation>
@@ -488,15 +484,10 @@ const RemBlissPage = () => {
                   transition={{ duration: 0.6, delay: 0.3 }}
                   className="flex flex-row gap-3 justify-center items-center w-full max-w-md mx-auto"
                 >
-                  <motion.a
-                    href="https://calendly.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.02 }}
+                  <BookConsultationButton
+                    hoverScale={1.02}
                     className="flex-1 text-center py-3 sm:py-4 bg-[var(--text-color-light)] text-black font-semibold rounded-xl hover:opacity-90 transition-all duration-300 text-base sm:text-base"
-                  >
-                    Book Consultation
-                  </motion.a>
+                  />
                 </motion.div>
               </div>
             </div>

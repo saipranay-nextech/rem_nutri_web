@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Button } from "../components/ui/button";
+import { buttonVariants } from "../components/ui/button";
+import BookConsultationButton from "./BookConsultationButton";
+import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 
@@ -129,13 +131,14 @@ const Navbar: React.FC<NavbarProps> = ({
                 Contact
               </Link>
             </div>
-            <Button
-              className={`${currentTheme.buttonBg} hover:opacity-80 ${currentTheme.buttonText} text-[16px] font-semibold px-[24px] py-[24px] rounded-lg shadow-md cursor-pointer`}
+            <BookConsultationButton
+              className={cn(
+                buttonVariants(),
+                `${currentTheme.buttonBg} hover:opacity-80 ${currentTheme.buttonText} text-[16px] font-semibold px-[24px] py-[24px] rounded-lg shadow-md cursor-pointer`
+              )}
             >
-              <a href="https://calendly.com/" target="_blank" rel="noopener noreferrer">
-                Book an appointment
-              </a>
-            </Button>
+              Book an appointment
+            </BookConsultationButton>
           </div>
 
           {/* Hamburger Menu Button - Mobile */}
@@ -351,14 +354,20 @@ const Navbar: React.FC<NavbarProps> = ({
                   exit: { y: 20, opacity: 0 },
                 }}
               >
-                <Button
-                  className={`${currentTheme.buttonBg} hover:opacity-80 ${currentTheme.buttonText} text-[16px] font-semibold px-[24px] py-[24px] rounded-lg shadow-md mt-8 w-full`}
-                  asChild
+                {/*
+                  Note: this must not close the mobile menu on open. The button
+                  lives inside the menu's AnimatePresence subtree, so closing the
+                  menu unmounts the button and the dialog portal it owns. The
+                  dialog sits above the menu (z-9999 vs z-25) instead.
+                */}
+                <BookConsultationButton
+                  className={cn(
+                    buttonVariants(),
+                    `${currentTheme.buttonBg} hover:opacity-80 ${currentTheme.buttonText} text-[16px] font-semibold px-[24px] py-[24px] rounded-lg shadow-md mt-8 w-full`
+                  )}
                 >
-                  <a href="https://calendly.com/" target="_blank" rel="noopener noreferrer">
-                    Book an appointment
-                  </a>
-                </Button>
+                  Book an appointment
+                </BookConsultationButton>
               </motion.div>
             </motion.div>
           </motion.div>

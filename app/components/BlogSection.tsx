@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "../components/ui/button";
 import Link from "next/link";
 import ScrollAnimation from "./ScrollAnimation";
-import { client } from "../../sanity/lib/client";
+import { safeFetch } from "../../sanity/lib/client";
 import BlogCard from "./BlogCard";
 
 interface BlogPost {
@@ -13,7 +13,7 @@ interface BlogPost {
 }
 
 const BlogSection = async () => {
-  const blogPosts: BlogPost[] = await client.fetch(`
+  const blogPosts = await safeFetch<BlogPost[]>(`
     *[_type == "post"] | order(publishedAt desc)[0..1]{
       title,
       "slug": slug.current,
@@ -21,7 +21,7 @@ const BlogSection = async () => {
       "description": titleLine,
       publishedAt
     }
-  `);
+  `, {}, []);
 
   return (
     <div className="w-full pt-16 md:py-16 bg-[var(--background-color-plain)] bg-cover bg-center bg-no-repeat relative">

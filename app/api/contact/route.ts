@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
 import fs from 'fs';
 import path from 'path';
 import { getGoogleSheetsClient } from '@/app/utils/googleSheets';
+import { sendEmailSafely, SITE_URL, TEAM_EMAIL } from '@/app/utils/email';
 
 // Google Sheets setup
 const SPREADSHEET_ID = process.env.GOOGLE_SHEET_ID;
@@ -107,40 +107,13 @@ const storeContactLocally = async (contactData: any, timestamp: string) => {
   }
 };
 
-// Email setup
-const createTransporter = () => {
-  try {
-    // Validate required env vars
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-      throw new Error('Missing email credentials');
-    }
-    
-    console.log(`Creating transporter with email: ${process.env.EMAIL_USER}`);
-    
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.zoho.in',
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    });
-    
-    return transporter;
-  } catch (error) {
-    console.error('Error creating email transporter:', error);
-    throw new Error('Failed to create email transporter');
-  }
-};
-
 const validServices = [
   'rembliss',
   'remprotein',
   'remfit',
   'rembalance',
   'remmeta',
-  'remdi2'
+  'remdia'
 ];
 
 export async function POST(request: Request) {
@@ -189,23 +162,11 @@ export async function POST(request: Request) {
       storedSuccessfully = true;
     }
     
-    // 3. Try to send notification email to admin and confirmation to user
-    try {
-      // Check for placeholder email credentials
-      if (process.env.EMAIL_USER === 'your_actual_email@gmail.com' || 
-          process.env.EMAIL_PASSWORD === 'your_16_character_app_password') {
-        console.error('Email not configured: You need to replace the placeholder email credentials in .env.local file');
-        throw new Error('Email credentials are still set to placeholder values');
-      }
-
-      const transporter = createTransporter();
-      
-      // Send notification to admin
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: process.env.EMAIL_USER, // Send to yourself/admin
-        subject: 'New Contact Form Submission',
-        html: `
+    // 3. Notify the team and confirm to the user
+    const teamEmail = await sendEmailSafely('contact:team', {
+      to: TEAM_EMAIL,
+      subject: 'New Contact Form Submission',
+      html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333333;">
             <h1 style="color: #004d40;">New Contact Form Submission</h1>
             <p><strong>Name:</strong> ${firstName} ${lastName}</p>
@@ -216,14 +177,12 @@ export async function POST(request: Request) {
             <p><strong>Submitted at:</strong> ${new Date(timestamp).toLocaleString()}</p>
           </div>
         `,
-      });
-      
-      // Send confirmation to user
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: 'We received your message - RemNutri',
-        html: `
+    });
+
+    const userEmail = await sendEmailSafely('contact:user', {
+      to: email,
+      subject: 'We received your message - RemNutri',
+      html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333333;">
             <h1 style="color: #004d40;">Thank You for Contacting Us!</h1>
             <p>Hello ${firstName},</p>
@@ -238,31 +197,20 @@ export async function POST(request: Request) {
             <hr style="border: 1px solid #eeeeee; margin: 20px 0;">
             <p style="font-size: 12px; color: #777777;">
               RemNutri Health Private Limited<br>
-              <a href="https://rem-nutri-web.vercel.app/" style="color: #004d40; text-decoration: none;">www.remnutri.com</a>
+              <a href="${SITE_URL}" style="color: #004d40; text-decoration: none;">www.remnutri.com</a>
             </p>
           </div>
         `,
-      });
-      
-      console.log('Contact emails sent successfully');
-      emailSentSuccessfully = true;
-    } catch (error: any) {
-      let errorMessage = 'Email sending error';
-      
-      if (error.code === 'EAUTH') {
-        errorMessage = 'Authentication failed with the email provider. Please double-check your email credentials in the .env.local file.';
-      } else if (error.message && error.message.includes('placeholder')) {
-        errorMessage = 'Email credentials still using placeholder values in .env.local file';
-      }
-      
-      console.error(`${errorMessage}:`, error);
-      // Email failed, but we'll still acknowledge the submission if storage worked
-    }
+    });
+
+    emailSentSuccessfully = teamEmail.sent && userEmail.sent;
     
     // 4. Return appropriate response
     if (storedSuccessfully && emailSentSuccessfully) {
       return NextResponse.json(
         { 
+          success: true,
+          emailSent: true,
           message: 'Thank you for your message! We will get back to you soon.',
           data: {
             firstName,
@@ -277,7 +225,12 @@ export async function POST(request: Request) {
     } else if (storedSuccessfully) {
       return NextResponse.json({ 
         success: true, 
-        message: 'Thank you for your message! We have received your inquiry, but could not send a confirmation email.' 
+        emailSent: false,
+        message: 'Thank you for your message! We have received your inquiry, but could not send a confirmation email.',
+        warnings: {
+          ...(teamEmail.error ? { teamEmail: teamEmail.error } : {}),
+          ...(userEmail.error ? { userEmail: userEmail.error } : {}),
+        },
       });
     } else {
       // Critical error - couldn't store contact information

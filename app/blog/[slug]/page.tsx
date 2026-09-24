@@ -1,4 +1,4 @@
-import { client } from '../../../sanity/lib/client'
+import { safeFetch } from '../../../sanity/lib/client'
 import { PortableText } from '@portabletext/react'
 
 import Image from "next/image";
@@ -46,7 +46,7 @@ export default async function BlogPost({ params, }: { params: Promise<{ slug: st
 
   const { slug } = await params;
 
-  const post = await client.fetch(`
+  const post = await safeFetch<any>(`
     *[_type == "post" && slug.current == $slug][0]{
       title,
       titleLine,
@@ -57,16 +57,16 @@ export default async function BlogPost({ params, }: { params: Promise<{ slug: st
       readTime,
       body
     }
-  `, { slug })
+  `, { slug }, null)
 
-  const relatedPosts = await client.fetch(`
+  const relatedPosts = await safeFetch<any[]>(`
   *[_type == "post" && slug.current != $slug] | order(publishedAt desc)[0..1]{
     title,
     "slug": slug.current,
     "image": mainImageUrl,
     "description": titleLine
   }
-`, { slug });
+`, { slug }, []);
 
   if (!post) {
     return <p style={{ color: 'black' }}>Blog post not found!</p>
