@@ -116,7 +116,7 @@ const ContactForm = () => {
     { id: 'remfit', name: 'RemFit - Weight Loss Education Program' },
     { id: 'rembalance', name: 'RemBalance - Gut Health Program' },
     { id: 'remmeta', name: 'RemMeta - Metabolic Health Program' },
-    { id: 'remdi2', name: 'RemDi2 - Diabetes Management Program' }
+    { id: 'remdia', name: 'RemDia - Diabetes Management Program' }
   ].reverse();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

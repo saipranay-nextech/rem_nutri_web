@@ -4,6 +4,12 @@
 import { defineLive } from "next-sanity";
 import { client } from './client'
 
+if (!client) {
+  throw new Error(
+    'Sanity live content requires NEXT_PUBLIC_SANITY_PROJECT_ID. Set it in .env.local (see .env.example).'
+  )
+}
+
 export const { sanityFetch, SanityLive } = defineLive({ 
   client: client.withConfig({ 
     // Live content is currently only available on the experimental API

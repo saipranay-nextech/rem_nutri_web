@@ -1,3 +1,5 @@
+import './nodeCompat';
+
 import { drive } from '@googleapis/drive';
 import path from 'path';
 import fs from 'fs';

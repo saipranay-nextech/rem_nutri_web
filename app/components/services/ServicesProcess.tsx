@@ -1,5 +1,6 @@
 "use client";
 import React, { useRef, useEffect, useState } from "react";
+import BookConsultationButton from "../BookConsultationButton";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import ScrollAnimation from "../ScrollAnimation";
 import Link from "next/link";
@@ -132,12 +133,11 @@ const ServicesProcess = () => {
                 guiding you towards a healthier life.
               </p>
               <div>
-                <a
-                  href="https://calendly.com/"
+                <BookConsultationButton
                   className="inline-block bg-[var(--background-color-light)] hover:opacity-50 font-bold text-[var(--text-color-dark)] py-3 px-6 rounded-md transition-colors"
                 >
-                Book an appointment
-                </a>
+                  Book an appointment
+                </BookConsultationButton>
               </div>
               <ScrollAnimation delay={0.6}>
                 <div className="relative mt-12">

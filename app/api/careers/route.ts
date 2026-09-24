@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server';
-import nodemailer from 'nodemailer';
+import { sendEmailSafely, SITE_URL, TEAM_EMAIL } from '@/app/utils/email';
 import fs from 'fs';
 import path from 'path';
 import { getGoogleSheetsClient } from '@/app/utils/googleSheets';
@@ -318,32 +318,11 @@ export async function POST(req: NextRequest) {
     
     // 5. Send notification emails
     console.log('Step 5: Sending notification emails');
-    let emailSuccess = false;
-    
-    try {
-      // Check if email is configured
-      if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD || 
-          process.env.EMAIL_USER === 'your_actual_email@gmail.com' || 
-          process.env.EMAIL_PASSWORD === 'your_16_character_app_password') {
-        console.log('Email not configured - skipping');
-      } else {
-        // Create email transporter
-        const transporter = nodemailer.createTransport({
-          host: 'smtp.zoho.in',
-          port: 465,
-          secure: true,
-          auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASSWORD,
-          },
-        });
-        
-        // Send admin notification
-        await transporter.sendMail({
-          from: process.env.EMAIL_USER,
-          to: process.env.EMAIL_USER, // Send to admin
-          subject: 'New Career Application Submission',
-          html: `
+
+    const teamEmail = await sendEmailSafely('careers:team', {
+      to: TEAM_EMAIL,
+      subject: 'New Career Application Submission',
+      html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333333;">
               <h1 style="color: #004d40;">New Career Application Submission</h1>
               <p><strong>Name:</strong> ${firstName} ${lastName}</p>
@@ -356,15 +335,12 @@ export async function POST(req: NextRequest) {
               <p><strong>Submitted at:</strong> ${new Date(timestamp).toLocaleString()}</p>
             </div>
           `,
-        });
-        console.log('Admin notification email sent');
-        
-        // Send confirmation to applicant
-        await transporter.sendMail({
-          from: process.env.EMAIL_USER,
-          to: email,
-          subject: 'Your Application has been received - RemNutri',
-          html: `
+    });
+
+    const applicantEmail = await sendEmailSafely('careers:applicant', {
+      to: email,
+      subject: 'Your Application has been received - RemNutri',
+      html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333333;">
               <h1 style="color: #004d40;">Thank You for Your Application!</h1>
               <p>Hello ${firstName},</p>
@@ -375,19 +351,13 @@ export async function POST(req: NextRequest) {
               <hr style="border: 1px solid #eeeeee; margin: 20px 0;">
               <p style="font-size: 12px; color: #777777;">
                 RemNutri Health Private Limited<br>
-                <a href="https://rem-nutri-web.vercel.app/" style="color: #004d40; text-decoration: none;">www.remnutri.com</a>
+                <a href="${SITE_URL}" style="color: #004d40; text-decoration: none;">www.remnutri.com</a>
               </p>
             </div>
           `,
-        });
-        console.log('Applicant confirmation email sent');
-        
-        emailSuccess = true;
-      }
-    } catch (emailError) {
-      console.error('Email sending error:', emailError);
-      // Continue processing - email failure isn't critical
-    }
+    });
+
+    const emailSuccess = teamEmail.sent && applicantEmail.sent;
     
     // 6. Return appropriate response
     console.log('Step 6: Returning response');
@@ -401,9 +371,18 @@ export async function POST(req: NextRequest) {
       
       return NextResponse.json({
         success: true,
+        emailSent: emailSuccess,
         message,
         resumeLink,
-        uploadError
+        uploadError,
+        ...(teamEmail.error || applicantEmail.error
+          ? {
+              warnings: {
+                ...(teamEmail.error ? { teamEmail: teamEmail.error } : {}),
+                ...(applicantEmail.error ? { applicantEmail: applicantEmail.error } : {}),
+              },
+            }
+          : {}),
       });
     } else {
       return NextResponse.json({

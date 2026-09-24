@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
-import { google } from 'googleapis';
 import fs from 'fs';
 import path from 'path';
 import { getGoogleSheetsClient } from '@/app/utils/googleSheets';
+import { sendEmailSafely, SITE_URL } from '@/app/utils/email';
 
 // Google Sheets setup
 const SPREADSHEET_ID = process.env.GOOGLE_SHEET_ID;
@@ -42,33 +41,6 @@ const storeEmailLocally = async (email: string, timestamp: string) => {
   } catch (error) {
     console.error('Error storing email locally:', error);
     return false;
-  }
-};
-
-// Email setup
-const createTransporter = () => {
-  try {
-    // Validate required env vars
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-      throw new Error('Missing email credentials');
-    }
-    
-    console.log(`Creating transporter with email: ${process.env.EMAIL_USER}`);
-    
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.zoho.in',
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    });
-    
-    return transporter;
-  } catch (error) {
-    console.error('Error creating email transporter:', error);
-    throw new Error('Failed to create email transporter');
   }
 };
 
@@ -154,36 +126,13 @@ export async function POST(req: Request) {
       storedSuccessfully = await storeEmailLocally(email, timestamp);
     }
     
-    // 2. Try to send confirmation email
-    try {
-      // Check for placeholder email credentials
-      if (process.env.EMAIL_USER === 'your_actual_email@gmail.com' || 
-          process.env.EMAIL_PASSWORD === 'your_16_character_app_password') {
-        console.error('Email not configured: You need to replace the placeholder email credentials in .env.local file');
-        throw new Error('Email credentials are still set to placeholder values');
-      }
-
-      console.log(`Creating transporter with email: ${process.env.EMAIL_USER}`);
-      
-      const transporter = nodemailer.createTransport({
-        host: 'smtp.zoho.in',
-        port: 465,
-        secure: true,
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASSWORD,
-        },
-      });
-      
-      console.log('Sending confirmation email...');
-      
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: 'Welcome to RemNutri Newsletter!',
-        html: `
+    // 2. Send the welcome email
+    const welcomeEmail = await sendEmailSafely('subscribe:user', {
+      to: email,
+      subject: 'Welcome to RemNutri Newsletter!',
+      html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333333;">
-            <img src="https://your-website.com/images/rem_nutri_logo_.png" alt="RemNutri Logo" style="max-width: 150px; margin-bottom: 20px;">
+            <img src="${SITE_URL}/images/rem_nutri_logo_.png" alt="RemNutri Logo" style="max-width: 150px; margin-bottom: 20px;">
             <h1 style="color: #004d40;">Thank You for Subscribing!</h1>
             <p>Hello,</p>
             <p>Thank you for subscribing to the RemNutri newsletter. We're excited to share updates, health tips, and special offers with you.</p>
@@ -195,37 +144,27 @@ export async function POST(req: Request) {
             <hr style="border: 1px solid #eeeeee; margin: 20px 0;">
             <p style="font-size: 12px; color: #777777;">
               RemNutri Health Private Limited<br>
-              <a href="https://rem-nutri-web.vercel.app/" style="color: #004d40; text-decoration: none;">www.remnutri.com</a>
+              <a href="${SITE_URL}" style="color: #004d40; text-decoration: none;">www.remnutri.com</a>
             </p>
           </div>
         `,
-      });
-      
-      console.log('Confirmation email sent successfully');
-      emailSentSuccessfully = true;
-    } catch (error: any) {
-      let errorMessage = 'Email sending error';
-      
-      if (error.code === 'EAUTH') {
-        errorMessage = 'Authentication failed with email provider. Make sure you\'re using an App Password for Gmail.';
-      } else if (error.message && error.message.includes('placeholder')) {
-        errorMessage = 'Email credentials still using placeholder values in .env.local file';
-      }
-      
-      console.error(`${errorMessage}:`, error);
-      // Email failed, but we'll still acknowledge the subscription if storage worked
-    }
+    });
+
+    emailSentSuccessfully = welcomeEmail.sent;
     
     // 3. Return appropriate response
     if (storedSuccessfully && emailSentSuccessfully) {
       return NextResponse.json({ 
         success: true, 
+        emailSent: true,
         message: 'Subscription successful! Check your email for confirmation.' 
       });
     } else if (storedSuccessfully) {
       return NextResponse.json({ 
         success: true, 
-        message: 'Subscription successful! However, we could not send a confirmation email.' 
+        emailSent: false,
+        message: 'Subscription successful! However, we could not send a confirmation email.',
+        ...(welcomeEmail.error ? { warnings: { userEmail: welcomeEmail.error } } : {}),
       });
     } else {
       // Critical error - couldn't store email anywhere

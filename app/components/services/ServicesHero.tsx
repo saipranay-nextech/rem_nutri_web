@@ -311,9 +311,9 @@ const ServicesHero = () => {
   const programs = [
     {
       icon: "💉",
-      title: "RemDi 2",
+      title: "RemDia",
       description: "Type 2 and Pre Diabetes Reversal Programme",
-      path: "/programs/remdi2"
+      path: "/programs/remdia"
     },
     {
       icon: "🌺",

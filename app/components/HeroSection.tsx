@@ -12,7 +12,7 @@ const MemoizedFeatureGrid = memo(FeatureGrid);
 const HeroSection = () => {
   const images = [
     "https://images.unsplash.com/photo-1661257711676-79a0fc533569?q=80&w=2918&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    // // RemDi2 - Brighter healthy meal with berries
+    // // RemDia - Brighter healthy meal with berries
     "https://images.unsplash.com/photo-1589778655375-3e622a9fc91c?q=80&w=2931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", 
 
     "https://images.unsplash.com/photo-1565689157206-0fddef7589a2?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", 

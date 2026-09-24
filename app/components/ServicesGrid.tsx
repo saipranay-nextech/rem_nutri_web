@@ -16,7 +16,7 @@ import Link from "next/link";
 
 
 // Custom Home Icon using Tailwind CSS
-const Remdi2 = () => (
+const RemDia = () => (
 
   
   <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -98,7 +98,7 @@ const ServiceCard = ({ icon, title, description, onClick }: {
   // Get the background image based on the title
   const getBackgroundImage = (title: string) => {
     switch(title) {
-      case "RemDi 2":
+      case "RemDia":
         return "https://images.unsplash.com/photo-1628619876503-2db74e724757?q=80&w=3010&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
       case "Rem Bliss":
         return "https://images.unsplash.com/photo-1728562870259-8136fa21cc72?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDJ8fGluZGlhbiUyMGZlbWFsZSUyMGdyb3VwfGVufDB8fDB8fHww";
@@ -219,9 +219,9 @@ const ServicesGrid = () => {
   const services = [
     {
       icon: <span className="text-3xl md:text-5xl">💉</span>,
-      title: "RemDi 2",
+      title: "RemDia",
       description: "Type 2 and Pre Diabetes Reversal Programme.",
-      path: "/programs/remdi2",
+      path: "/programs/remdia",
     },
     {
       icon: <span className="text-3xl md:text-5xl">🌺</span>,
