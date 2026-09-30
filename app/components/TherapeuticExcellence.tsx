@@ -46,7 +46,7 @@ const TherapeuticExcellence = () => {
 
         {/* <ScrollAnimation delay={0.2}>
           <p className="text-[#024027] text-lg sm:text-[20px]  font-['DM_Sans', 'sans-serif'] max-w-4xl mx-auto mb-12 leading-relaxed">
-            At Fizeo, we offer a diverse range of services meticulously designed
+            At RemDi, we offer a diverse range of services meticulously designed
             to
             <span className="hidden md:block"></span> cater to your unique
             needs. Whether you're recovering from an injury,{" "}

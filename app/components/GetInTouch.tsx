@@ -119,14 +119,17 @@ const GetInTouch = () => {
                 </div> */}
                 <div className="flex items-center space-x-3">
                   <Customcall />
-                  <span className="text-[var(--text-color-dark)] text-[14px] md:text-[16px] font-['DM_Sans',sans-serif]">
-                  00917207646868
-                  </span>
+                  <a
+                    href="tel:+917207646868"
+                    className="text-[var(--text-color-dark)] text-[14px] md:text-[16px] font-['DM_Sans',sans-serif]"
+                  >
+                    +91 72076 46868
+                  </a>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Custommail />
                   <a
-                    href="mailto:info@fizeo.com"
+                    href="mailto:Support@remdi.in"
                     className="text-[var(--text-color-dark)] text-[14px] md:text-[16px] font-['DM_Sans',sans-serif] underline"
                   >
                     Support@remdi.in

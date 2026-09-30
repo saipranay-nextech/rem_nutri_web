@@ -1,105 +1,158 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import type { Metadata } from "next";
+import PolicyPage, { PolicySection, PolicyList } from "../components/PolicyPage";
+import { COMPANY, orPlaceholder } from "@/lib/company";
 
-const PrivacyPolicy = () => {
-  return (
-    <div>
-
-      <Navbar/>
-    
-    <div className="px-[8%] py-[35%] md:py-[12%] bg-[var(--background-color-plain)] mx-auto text-black">
-      
-      <h1 className="font-['Libre_Baskerville',serif] text-[#000000] mb-5 md:mb-16 text-[40px]">Privacy Policy</h1>
-      <p className="mb-4  text-[16px] text-[#000000] font-['DM_Sans', 'sans-serif']">
-        This Privacy Policy outlines how Business Name ("we," "our," or "us") collects, uses, protects, and discloses the
-        personal information of visitors ("users," "you," or "your") to www.website.com (the "Website"). Please read this
-        Privacy Policy carefully to understand our practices regarding your personal information and how we handle it.
-        By accessing or using the Website, you agree to the terms of this Privacy Policy.
-      </p>
-
-      <h2 className="text-xl font-bold mt-6">1. Information We Collect</h2>
-      <p className="mt-2">
-        We may collect both personally identifiable information ("PII") and non-personally identifiable information
-        ("Non-PII") from users through various interactions with the Website, including but not limited to:
-      </p>
-
-      <h3 className="font-semibold mt-4">a. Personal Information:</h3>
-      <ul className="list-disc pl-6">
-        <li>Name</li>
-        <li>Email address</li>
-        <li>Contact information</li>
-        <li>Any other information you voluntarily provide</li>
-      </ul>
-
-      <h3 className="font-semibold mt-4">b. Non-Personal Information:</h3>
-      <ul className="list-disc pl-6">
-        <li>Browser type</li>
-        <li>Operating system</li>
-        <li>IP address</li>
-        <li>Usage data (pages visited, actions taken on the Website)</li>
-      </ul>
-
-      <h2 className="text-xl font-bold mt-6">2. How We Use Your Information</h2>
-      <ul className="list-disc pl-6">
-        <li>To personalize your experience on the Website</li>
-        <li>To send you periodic emails with updates, news, and promotions (you can opt out at any time)</li>
-        <li>To improve our Website and services based on your feedback</li>
-        <li>To analyze and monitor usage patterns and trends</li>
-        <li>To fulfill our legal obligations and protect our rights</li>
-      </ul>
-
-      <h2 className="text-xl font-bold mt-6">3. Cookies and Tracking Technologies</h2>
-      <p className="mt-2">
-        We may use cookies and other tracking technologies to enhance user experience and collect usage data. Cookies are
-        small files stored on your device that enable the Website to recognize your browser and capture certain information.
-      </p>
-
-      <h2 className="text-xl font-bold mt-6">4. Data Security</h2>
-      <p className="mt-2">
-        We implement industry-standard security measures to protect your personal information from unauthorized access,
-        alteration, disclosure, or destruction. However, no data transmission over the internet or electronic storage is
-        entirely secure, and we cannot guarantee absolute security.
-      </p>
-
-      <h2 className="text-xl font-bold mt-6">5. Third-Party Links</h2>
-      <p className="mt-2">
-        The Website may contain links to third-party websites, products, or services. These third-party sites have their own
-        privacy policies, which we do not control. We are not responsible for the content or practices of these third-party
-        websites.
-      </p>
-
-      <h2 className="text-xl font-bold mt-6">6. Children's Privacy</h2>
-      <p className="mt-2">
-        Our Website is not intended for use by individuals under the age of 13. We do not knowingly collect personal
-        information from children under 13. If you believe we have collected information from a child under 13, please
-        contact us immediately.
-      </p>
-
-      <h2 className="text-xl font-bold mt-6">7. Your Rights</h2>
-      <p className="mt-2">
-        You have the right to access, modify, or delete the personal information we hold about you. You can also unsubscribe
-        from our emails at any time by using the provided opt-out link. If you wish to exercise any of these rights, please
-        contact us at <span className="font-semibold">email@website.com</span>.
-      </p>
-
-      <h2 className="text-xl font-bold mt-6">8. Changes to this Privacy Policy</h2>
-      <p className="mt-2">
-        We reserve the right to update or modify this Privacy Policy at any time without prior notice. Any changes will be
-        effective immediately upon posting on the Website. We encourage you to review this Privacy Policy periodically for
-        any updates.
-      </p>
-
-      <h2 className="text-xl font-bold mt-6">9. Contact Us</h2>
-      <p className="mt-2">
-        If you have any questions, concerns, or requests regarding this Privacy Policy or your personal information, please
-        contact us at <span className="font-semibold">email@website.com</span>. By using the Website, you agree to the
-        terms of this Privacy Policy. If you do not agree with our practices outlined in this policy, please refrain from
-        using the Website.
-      </p>
-    </div>
-
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "Privacy Policy | RemDi",
+  description: `How ${COMPANY.legalName} collects, uses and protects your personal information.`,
 };
+
+const PrivacyPolicy = () => (
+  <PolicyPage title="Privacy Policy" lastUpdated="28 September 2026">
+    <p>
+      This Privacy Policy explains how {COMPANY.legalName} (&quot;we&quot;, &quot;our&quot; or
+      &quot;us&quot;), which operates the {COMPANY.brandName} programmes, collects, uses, protects
+      and discloses the personal information of visitors (&quot;you&quot; or &quot;your&quot;) to{" "}
+      {COMPANY.domain} (the &quot;Website&quot;). By accessing or using the Website you agree to
+      this Policy.
+    </p>
+
+    <PolicySection heading="1. Information we collect">
+      <p>
+        We collect both personally identifiable information and non-personal information through
+        your interactions with the Website.
+      </p>
+      <p className="font-semibold">a. Personal information</p>
+      <PolicyList
+        items={[
+          "Name, email address and phone number",
+          "Health information you choose to share through the Health Assessment — including age, gender, height, weight, health conditions, dietary habits, lifestyle factors, allergies and medications",
+          "Billing details required to process a payment (payments are handled by our payment gateway; we do not store card details)",
+          "Any other information you voluntarily provide, such as messages sent through our contact form or job applications",
+        ]}
+      />
+      <p className="font-semibold">b. Non-personal information</p>
+      <PolicyList
+        items={["Browser type", "Operating system", "IP address", "Usage data such as pages visited and actions taken on the Website"]}
+      />
+    </PolicySection>
+
+    <PolicySection heading="2. How we use your information">
+      <PolicyList
+        items={[
+          "To assess your health inputs and recommend a suitable programme",
+          "To deliver the programme you have enrolled in, including consultations and meal guidance",
+          "To contact you about your enquiry, assessment or enrolment",
+          "To process payments, issue invoices and handle refunds",
+          "To send you newsletters and updates where you have opted in (you can unsubscribe at any time)",
+          "To improve the Website and our services",
+          "To meet our legal and regulatory obligations",
+        ]}
+      />
+    </PolicySection>
+
+    <PolicySection heading="3. Health information">
+      <p>
+        Health information you submit through the Health Assessment is used solely to recommend and
+        deliver a suitable programme. It is shared only with the qualified members of our team
+        involved in your care, and is never sold or rented to third parties. You may ask us to
+        delete it at any time by writing to {COMPANY.supportEmail}.
+      </p>
+    </PolicySection>
+
+    <PolicySection heading="4. Cookies and tracking technologies">
+      <p>
+        We may use cookies and similar technologies to improve your experience and understand how
+        the Website is used. Cookies are small files stored on your device that allow the Website to
+        recognise your browser. You can disable cookies in your browser settings, though parts of
+        the Website may then not function as intended.
+      </p>
+    </PolicySection>
+
+    <PolicySection heading="5. Sharing your information">
+      <p>We do not sell your personal information. We share it only with:</p>
+      <PolicyList
+        items={[
+          "Service providers who help us operate the Website and deliver our programmes, such as our payment gateway, email provider and cloud hosting, each bound to handle your data confidentially",
+          "Authorities, where we are required to do so by law",
+        ]}
+      />
+    </PolicySection>
+
+    <PolicySection heading="6. Data security">
+      <p>
+        We apply industry-standard measures to protect your personal information against
+        unauthorised access, alteration, disclosure or destruction. No transmission over the
+        internet or method of electronic storage is entirely secure, however, and we cannot
+        guarantee absolute security.
+      </p>
+    </PolicySection>
+
+    <PolicySection heading="7. Data retention">
+      <p>
+        We keep your personal information only for as long as needed to provide our services and to
+        meet our legal, accounting and reporting obligations. When it is no longer required we
+        delete it or anonymise it.
+      </p>
+    </PolicySection>
+
+    <PolicySection heading="8. Third-party links">
+      <p>
+        The Website may link to third-party websites, products or services. Those sites have their
+        own privacy policies, which we do not control, and we are not responsible for their content
+        or practices.
+      </p>
+    </PolicySection>
+
+    <PolicySection heading="9. Children's privacy">
+      <p>
+        The Website is not intended for individuals under the age of 18, and we do not knowingly
+        collect their personal information. If you believe we have collected information from a
+        minor, please contact us and we will delete it.
+      </p>
+    </PolicySection>
+
+    <PolicySection heading="10. Your rights">
+      <p>
+        You may access, correct or delete the personal information we hold about you, withdraw
+        consent, or unsubscribe from our emails using the link in any message. To exercise any of
+        these rights, write to us at{" "}
+        <a href={`mailto:${COMPANY.supportEmail}`} className="underline">
+          {COMPANY.supportEmail}
+        </a>
+        .
+      </p>
+    </PolicySection>
+
+    <PolicySection heading="11. Changes to this Policy">
+      <p>
+        We may update this Policy from time to time. Changes take effect when posted on this page,
+        and the &quot;last updated&quot; date above will reflect the revision.
+      </p>
+    </PolicySection>
+
+    <PolicySection heading="12. Contact us">
+      <p>
+        For any question about this Policy or your personal information, contact us at:
+      </p>
+      <p>
+        {COMPANY.legalName}
+        <br />
+        {orPlaceholder(COMPANY.registeredAddress, "Registered address")}
+        <br />
+        Email:{" "}
+        <a href={`mailto:${COMPANY.supportEmail}`} className="underline">
+          {COMPANY.supportEmail}
+        </a>
+        <br />
+        Phone:{" "}
+        <a href={`tel:${COMPANY.phoneHref}`} className="underline">
+          {COMPANY.phoneDisplay}
+        </a>
+      </p>
+    </PolicySection>
+  </PolicyPage>
+);
 
 export default PrivacyPolicy;

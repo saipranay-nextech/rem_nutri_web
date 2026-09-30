@@ -5,13 +5,12 @@ import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Mail, Phone, X } from "lucide-react";
 
-/**
- * Support contact details shown in the consultation dialog.
- * These mirror what the About page shows via <GetInTouch />.
- */
-export const SUPPORT_PHONE_DISPLAY = "+91 7207646868";
-export const SUPPORT_PHONE_HREF = "+917207646868";
-export const SUPPORT_EMAIL = "Support@remdi.in";
+import { COMPANY } from "@/lib/company";
+
+/** Support contact details shown in the dialog, from the central company config. */
+export const SUPPORT_PHONE_DISPLAY = COMPANY.phoneDisplay;
+export const SUPPORT_PHONE_HREF = COMPANY.phoneHref;
+export const SUPPORT_EMAIL = COMPANY.supportEmail;
 
 interface BookConsultationButtonProps {
   /** Classes for the trigger button, so it can match whatever CTA it replaces. */

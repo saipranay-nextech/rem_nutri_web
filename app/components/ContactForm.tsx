@@ -9,6 +9,7 @@
 
 import React from 'react';
 import { Mail, Phone, MapPin, Instagram, Facebook, Twitter, Youtube } from 'lucide-react';
+import { COMPANY, orPlaceholder } from '@/lib/company';
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { Label } from "../components/ui/label";
@@ -220,8 +221,8 @@ const ContactForm = () => {
                 </div>
                 <div>
                   <h3 className="text-[var(--text-color-dark)] text-[24px] font-['Libre_Baskerville',serif]">Email us</h3>
-                  <a href="mailto:info@fizeo.com" className="text-[var(--text-color-dark)] text-[20px] font-['DM_Sans', 'sans-serif']">
-                  Support@remdi.in
+                  <a href={`mailto:${COMPANY.supportEmail}`} className="text-[var(--text-color-dark)] text-[20px] font-['DM_Sans', 'sans-serif']">
+                  {COMPANY.supportEmail}
                   </a>
                 </div>
               </div>
@@ -232,24 +233,34 @@ const ContactForm = () => {
                 </div>
                 <div>
                   <h3 className="text-[var(--text-color-dark)] text-[24px]  font-['Libre_Baskerville',serif]">Phone us</h3>
-                  <span className="text-[var(--text-color-dark)] text-[20px] font-['DM_Sans', 'sans-serif']">00917207646868</span>
+                  <a href={`tel:${COMPANY.phoneHref}`} className="text-[var(--text-color-dark)] text-[20px] font-['DM_Sans', 'sans-serif']">{COMPANY.phoneDisplay}</a>
                 </div>
               </div>
 
-              {/* <div className="flex items-center gap-5">
-                <div className="w-16 h-16 rounded-full bg-[var(--background-color-dark)] flex items-center justify-center">
-                  <MapPin  className='text-[var(--text-color-plain)]'/>
+              <div className="flex items-start gap-5">
+                <div className="w-16 h-16 shrink-0 rounded-full bg-[var(--background-color-dark)] flex items-center justify-center">
+                  <MapPin className='text-[var(--text-color-plain)]'/>
                 </div>
                 <div>
-                  <h3 className="text-[var(--text-color-dark)] text-[24px]  font-['Libre_Baskerville',serif]">Find us</h3>
-                  <span className="text-[var(--text-color-dark)] text-[20px] font-['DM_Sans', 'sans-serif']">123 Main Street, Banglore</span>
+                  <h3 className="text-[var(--text-color-dark)] text-[24px] font-['Libre_Baskerville',serif]">Find us</h3>
+                  <address className="not-italic text-[var(--text-color-dark)] text-[18px] md:text-[20px] font-['DM_Sans', 'sans-serif']">
+                    <span className="block font-semibold">{COMPANY.legalName}</span>
+                    <span className="block">{orPlaceholder(COMPANY.registeredAddress, 'Registered address — to be added')}</span>
+                    {COMPANY.gstin ? <span className="block text-[16px]">GSTIN: {COMPANY.gstin}</span> : null}
+                  </address>
                 </div>
-              </div> */}
+              </div>
             </div>
 
             {/* Social media icons */}
             <div className="flex gap-6 pt-6 text-[var(--text-color-dark)]">
-              <a href="#" className="w-10 h-10  flex items-center justify-center">
+              <a
+                href="https://www.instagram.com/remdiofficial/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="RemDi on Instagram"
+                className="w-10 h-10  flex items-center justify-center"
+              >
                 <Custinsta />
               </a>
               <a href="#" className="w-10 h-10 flex items-center justify-center ">

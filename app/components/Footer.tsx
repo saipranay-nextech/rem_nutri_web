@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import { Facebook, Instagram, Twitter, Linkedin } from 'lucide-react';
+import { COMPANY, orPlaceholder } from '@/lib/company';
 import Link from "next/link";
 
 const Footer = () => {
@@ -114,7 +115,10 @@ const Footer = () => {
             <ul className="space-y-2">
               {/* <li><a href="#" className=" text-[var(--text-color-plain)] font-['DM_Sans', 'sans-serif'] text-[10px] md:text-sm">Styleguide</a></li> */}
               <li><Link href="/privacy" className="text-[var(--text-color-plain)] font-['DM_Sans', 'sans-serif'] text-[13px] md:text-sm">Privacy Policy</Link></li>
-              <li><Link href="/testinomials" className="text-[var(--text-color-plain)] font-['DM_Sans', 'sans-serif'] text-[13px] md:text-sm">Testimonials</Link></li>
+              <li><Link href="/terms" className="text-[var(--text-color-plain)] font-['DM_Sans', 'sans-serif'] text-[13px] md:text-sm">Terms &amp; Conditions</Link></li>
+              <li><Link href="/refund-policy" className="text-[var(--text-color-plain)] font-['DM_Sans', 'sans-serif'] text-[13px] md:text-sm">Refund &amp; Cancellation</Link></li>
+              <li><Link href="/shipping-policy" className="text-[var(--text-color-plain)] font-['DM_Sans', 'sans-serif'] text-[13px] md:text-sm">Shipping &amp; Delivery</Link></li>
+              <li><Link href="/testimonials" className="text-[var(--text-color-plain)] font-['DM_Sans', 'sans-serif'] text-[13px] md:text-sm">Testimonials</Link></li>
               {/* <li><a href="#" className="text-[var(--text-color-plain)] font-['DM_Sans', 'sans-serif'] text-[10px] md:text-sm">Feedback</a></li> */}
             </ul>
           </div>
@@ -167,13 +171,36 @@ const Footer = () => {
 
       <div className="w-[80%] ml-[10%] h-[1px] bg-gray-500 mt-10 mb-8"></div>
 
+      {/* Registered entity details - required for payment gateway onboarding */}
+      <div className="px-[10%] mb-6 text-[var(--text-color-plain)]/80 font-['DM_Sans', 'sans-serif'] text-[12px] md:text-[13px] leading-relaxed">
+        <p className="font-semibold text-[var(--text-color-plain)]">{COMPANY.legalName}</p>
+        <p>{orPlaceholder(COMPANY.registeredAddress, 'Registered address — to be added')}</p>
+        <p>
+          <a href={`mailto:${COMPANY.supportEmail}`} className="hover:underline">{COMPANY.supportEmail}</a>
+          {' · '}
+          <a href={`tel:${COMPANY.phoneHref}`} className="hover:underline">{COMPANY.phoneDisplay}</a>
+          {COMPANY.gstin ? ` · GSTIN: ${COMPANY.gstin}` : ''}
+        </p>
+      </div>
+
+      {/* Medical disclaimer - health and diabetes-reversal claims attract scrutiny */}
+      <div className="px-[10%] mb-8 text-[var(--text-color-plain)]/70 font-['DM_Sans', 'sans-serif'] text-[11px] md:text-[12px] leading-relaxed">
+        <p>
+          <span className="font-semibold">Medical disclaimer:</span> Our programmes provide nutrition
+          and wellness guidance and are not a substitute for professional medical advice, diagnosis or
+          treatment. Always consult your physician before making changes to your diet, lifestyle or
+          medication. Individual results vary and no specific health outcome is guaranteed.{' '}
+          <Link href="/terms" className="underline hover:text-[var(--text-color-light)]">Read our full terms</Link>.
+        </p>
+      </div>
+
 
       <div className=" pr-0 md:pt-6 px-[10%] flex flex-col w=full items-start text-left md:flex-row md:justify-between md:w-[90%] ">
 
         <div className="flex flex-col items-center md:flex-row md:justify-between mb-5 md:w-[60%]">
           {/* Copyright */}
           <div className="text-[var(--text-color-plain)] font-['DM_Sans', 'sans-serif'] text-[13px] md:text-[14px]">
-            © 2024 RemNutri Health Private Limited
+            © {new Date().getFullYear()} {COMPANY.legalName}. All rights reserved.
           </div>
 
           <div className="text-[var(--text-color-plain)] font-['DM_Sans', 'sans-serif'] text-[13px] md:text-[14px] mt-2 md:mt-0">
@@ -189,7 +216,7 @@ const Footer = () => {
           <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--text-color-light)] transition-colors">
             <Facebook size={20} />
           </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--text-color-light)] transition-colors">
+          <a href="https://www.instagram.com/remdiofficial/" target="_blank" rel="noopener noreferrer" aria-label="RemDi on Instagram" className="hover:text-[var(--text-color-light)] transition-colors">
             <Instagram size={20} />
           </a>
           <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--text-color-light)] transition-colors">
