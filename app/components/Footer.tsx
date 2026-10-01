@@ -174,7 +174,11 @@ const Footer = () => {
       {/* Registered entity details - required for payment gateway onboarding */}
       <div className="px-[10%] mb-6 text-[var(--text-color-plain)]/80 font-['DM_Sans', 'sans-serif'] text-[12px] md:text-[13px] leading-relaxed">
         <p className="font-semibold text-[var(--text-color-plain)]">{COMPANY.legalName}</p>
-        <p>{orPlaceholder(COMPANY.registeredAddress, 'Registered address — to be added')}</p>
+        <address className="not-italic">
+          {COMPANY.registeredAddressLines.map((line) => (
+            <span key={line} className="block">{line}</span>
+          ))}
+        </address>
         <p>
           <a href={`mailto:${COMPANY.supportEmail}`} className="hover:underline">{COMPANY.supportEmail}</a>
           {' · '}

@@ -61,9 +61,9 @@ const ShippingPolicy = () => (
           </>,
           <>
             <strong>Delivery area.</strong> We currently deliver meals within{" "}
-            {orPlaceholder("", "serviceable cities/pin codes")}. If your location is outside our
-            delivery area we will tell you before you pay, and the programme will be provided in its
-            online form instead.
+            <strong>{COMPANY.mealDeliveryArea}</strong>. If your location is outside our delivery
+            area we will tell you before you pay, and the programme will be provided in its online
+            form instead.
           </>,
           <>
             <strong>Delivery charges.</strong> Any delivery charge is shown at checkout before you

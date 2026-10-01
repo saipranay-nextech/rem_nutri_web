@@ -34,10 +34,22 @@ export const COMPANY = {
    * Full registered business address, exactly as it appears on the company's
    * KYC documents. Shown on the Contact page, in the footer and in the policies.
    */
-  registeredAddress: "",
+  registeredAddress:
+    "# 3-550, Street No. 8, Chandanayak Nagar, Ayyappa Society, Madhapur, Hyderabad 500 081, Telangana",
+
+  /** The same address broken into lines, for blocks that display it stacked. */
+  registeredAddressLines: [
+    "# 3-550, Street No. 8,",
+    "Chandanayak Nagar, Ayyappa Society,",
+    "Madhapur, Hyderabad",
+    "500 081, Telangana",
+  ] as readonly string[],
 
   /** GSTIN, if the company is registered. Leave blank if not applicable. */
-  gstin: "",
+  gstin: "36AANCR1929H2Z2",
+
+  /** Cities where physical meal deliveries are available. */
+  mealDeliveryArea: "Hyderabad and Secunderabad",
 
   /** Days before a programme starts during which a customer may cancel. */
   cancellationWindowDays: 7,
@@ -64,27 +76,94 @@ export function missingCompanyDetails(): string[] {
   return missing;
 }
 
-/** Programme pricing shown on the Services page and used in the policies. */
-export interface ProgramPrice {
-  id: string;
+/** One purchasable meal-plan tier within a programme. Prices are in INR. */
+export interface MealPlanTier {
   name: string;
-  /** Price in INR. Null until confirmed - the UI then shows "Contact us". */
-  priceInr: number | null;
-  /** e.g. "12 weeks", "3 months". */
-  duration: string;
-  summary: string;
+  weeklyInr: number;
+  monthlyInr: number;
 }
 
-// TO CONFIRM: real INR prices for each programme. Razorpay requires customers to
-// be able to see what they are paying for before checkout.
-export const PROGRAM_PRICES: ProgramPrice[] = [
-  { id: "remdia",     name: "RemDia",      priceInr: null, duration: "12 weeks", summary: "Type 2 and Pre-Diabetes reversal programme" },
-  { id: "rembliss",   name: "Rem Bliss",   priceInr: null, duration: "12 weeks", summary: "Women's health programme for PCOS/PCOD and menopause" },
-  { id: "remmeta",    name: "Rem Meta",    priceInr: null, duration: "12 weeks", summary: "Metabolic health, including high blood pressure" },
-  { id: "remfit",     name: "Rem Fit",     priceInr: null, duration: "12 weeks", summary: "Intensive weight loss, 4-5 kg per month" },
-  { id: "rembalance", name: "Rem Balance", priceInr: null, duration: "12 weeks", summary: "Weight maintenance through balanced nutrition" },
-  { id: "remprotein", name: "Rem Protein", priceInr: null, duration: "12 weeks", summary: "Protein-led nutrition for healthy weight gain" },
+export interface ProgramPricing {
+  /** Route segment under /programs. */
+  id: string;
+  name: string;
+  summary: string;
+  /** Meal-plan tiers. Empty for consultation-led programmes. */
+  tiers: MealPlanTier[];
+  /**
+   * True when the programme is delivered through consultation rather than sold
+   * as a meal plan, so it has no published price. The UI explains this and
+   * offers a consultation instead of showing an empty price table.
+   */
+  consultationLed?: boolean;
+}
+
+// Standard tiers shared by RemDia, RemMeta and RemBliss.
+const STANDARD_TIERS: MealPlanTier[] = [
+  { name: "One Protein Meal + Snack", weeklyInr: 3500, monthlyInr: 14000 },
+  { name: "High Protein Meal + Snack", weeklyInr: 4000, monthlyInr: 15500 },
+  { name: "Full Day Meal Plan", weeklyInr: 7000, monthlyInr: 28000 },
+  { name: "Full Day High Protein Meal Plan", weeklyInr: 7500, monthlyInr: 29000 },
 ];
+
+export const PROGRAM_PRICES: ProgramPricing[] = [
+  {
+    id: "remdia",
+    name: "RemDia",
+    summary: "Type 2 and Pre-Diabetes reversal programme",
+    tiers: STANDARD_TIERS,
+  },
+  {
+    id: "remmeta",
+    name: "RemMeta",
+    summary: "Metabolic health, including high blood pressure",
+    tiers: STANDARD_TIERS,
+  },
+  {
+    id: "remprotein",
+    name: "RemProtein",
+    summary: "Protein-led nutrition for healthy weight gain",
+    // RemProtein offers two tiers, and its full-day plan is priced at the
+    // high-protein rate.
+    tiers: [
+      { name: "High Protein Meal + Snack", weeklyInr: 4000, monthlyInr: 15500 },
+      { name: "Full Day Meal Plan", weeklyInr: 7500, monthlyInr: 29000 },
+    ],
+  },
+  {
+    id: "rembliss",
+    name: "RemBliss",
+    summary: "Women's health programme for PCOS/PCOD and menopause",
+    tiers: STANDARD_TIERS,
+  },
+  // These two are consultation-led rather than meal-plan products: the plan and
+  // fee are agreed after an initial consultation, so there is no listed price.
+  {
+    id: "remfit",
+    name: "RemFit",
+    summary: "Weight loss education programme — intensive weight loss or simply staying fit",
+    tiers: [],
+    consultationLed: true,
+  },
+  {
+    id: "rembalance",
+    name: "RemBalance",
+    summary: "Gut health and weight maintenance through balanced nutrition",
+    tiers: [],
+    consultationLed: true,
+  },
+];
+
+/** Lowest weekly price across a programme's tiers, for "from X" summaries. */
+export const startingWeeklyPrice = (p: ProgramPricing): number | null =>
+  p.tiers.length ? Math.min(...p.tiers.map((t) => t.weeklyInr)) : null;
+
+/**
+ * Programmes that should have a price but do not. Consultation-led programmes are
+ * excluded: they are priced after an initial consultation by design.
+ */
+export const programsMissingPrices = (): string[] =>
+  PROGRAM_PRICES.filter((p) => !p.consultationLed && p.tiers.length === 0).map((p) => p.name);
 
 export const formatInr = (amount: number) =>
   new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(amount);

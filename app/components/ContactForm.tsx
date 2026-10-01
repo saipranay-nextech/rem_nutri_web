@@ -245,7 +245,9 @@ const ContactForm = () => {
                   <h3 className="text-[var(--text-color-dark)] text-[24px] font-['Libre_Baskerville',serif]">Find us</h3>
                   <address className="not-italic text-[var(--text-color-dark)] text-[18px] md:text-[20px] font-['DM_Sans', 'sans-serif']">
                     <span className="block font-semibold">{COMPANY.legalName}</span>
-                    <span className="block">{orPlaceholder(COMPANY.registeredAddress, 'Registered address — to be added')}</span>
+                    {COMPANY.registeredAddressLines.map((line) => (
+                      <span key={line} className="block">{line}</span>
+                    ))}
                     {COMPANY.gstin ? <span className="block text-[16px]">GSTIN: {COMPANY.gstin}</span> : null}
                   </address>
                 </div>

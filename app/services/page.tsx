@@ -7,6 +7,7 @@ import ServicesProcess from "../components/services/ServicesProcess";
 import ServiceQueries from "../components/services/ServiceQueries";
 import GetInTouch from "../components/GetInTouch";
 import HealthServices from "../components/services/HealthServices";
+import ProgramPricingSection from "../components/ProgramPricing";
 import WhyFizeo from "../components/WhyFizeo";
 import NavbarWrapper from "../components/NavbarWrapper";
 
@@ -49,6 +50,7 @@ const Page = () => {
       </div> */}
       <WhyFizeo />
       <HealthServices />
+      <ProgramPricingSection />
       <ServiceQueries/>
       <GetInTouch />
     </div>

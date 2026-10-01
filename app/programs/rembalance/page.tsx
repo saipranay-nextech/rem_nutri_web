@@ -3,6 +3,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import BookConsultationButton from "../../components/BookConsultationButton";
+import { ProgramPricingBlock } from "../../components/ProgramPricing";
+import { PROGRAM_PRICES } from "@/lib/company";
 import ScrollAnimation from "../../components/ScrollAnimation";
 import Image from "next/image";
 import Navbar from "../../components/Navbar";
@@ -45,6 +47,9 @@ const programSteps = [
     description: "Access regular check-ins with nutrition experts who will monitor your progress and make adjustments to your plan as needed to ensure consistent weight maintenance.",
   },
 ];
+
+// Pricing for this programme, from the central pricing table.
+const PROGRAM_PRICING = PROGRAM_PRICES.find((p) => p.id === "rembalance")!;
 
 const RemBalancePage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -447,6 +452,15 @@ const RemBalancePage = () => {
           </div>
         </div>
       </section>
+
+      {/* Pricing */}
+      <div className="bg-[var(--background-color-plain)] py-16 md:py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <ScrollAnimation>
+            <ProgramPricingBlock program={PROGRAM_PRICING} />
+          </ScrollAnimation>
+        </div>
+      </div>
 
       {/* Call to Action */}
       <div className="bg-[var(--background-color-plain2)] py-20">
